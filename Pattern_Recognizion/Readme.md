@@ -14,6 +14,10 @@ Open Right folder:
 
 `cd Image-Processing/Pattern_Recognizion/`
 
+A new location for video is **required**, chage this in *laplacian.cpp* 
+line **13** the argument of *VideoCapture* must be the path to the video,
+if you want to use the default camera, put **0** as argument. 
+
 Compile Project running the makefile:
 
 `make`
