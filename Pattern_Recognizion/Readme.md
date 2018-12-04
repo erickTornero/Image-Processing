@@ -27,3 +27,10 @@ Compile Project running the makefile:
 
 `make exec`
 
+
+### Extras
+
+If you want to execute the threshold & medianblur filter, just change the filename
+in makefile by **main** 
+
+
