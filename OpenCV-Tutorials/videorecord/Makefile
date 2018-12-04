@@ -9,6 +9,9 @@ opencv_example: main.o; $(CXX) $< -o $@ $(LDFLAGS)
 
 %.o: %.cpp; $(CXX) $< -o $@ $(CXXFLAGS)
 
+opencv_example_test: test.o; $(CXX) $< -o $@ $(LDFLAGS)
+
+
 clean: ; rm -f main.o opencv_example
 
 exec:
