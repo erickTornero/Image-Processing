@@ -1,4 +1,5 @@
-#include "opencv2/opencv.hpp"
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 #include <opencv2/features2d.hpp>
 #include <iostream>
 #include <vector>
@@ -9,11 +10,14 @@ int main(){
  
   // Create a VideoCapture object and open the input file
   // If the input is the web camera, pass 0 instead of the video file name
-  //VideoCapture cap(0);
-  VideoCapture cap("/home/erick/Documentos/MsCS/Images/VideosPrueba/VideosPrueba/PadronCirculos_03.avi");
+  VideoCapture cap(-1);
+  //cap.open(0);
+  //cv::CvCapt
+  //VideoCapture cap("/home/erick/Documentos/MSCS/Images/VideosPrueba/PadronAnillos_01.avi");
   // Check if camera opened successfully
   if(!cap.isOpened()){
-    std::cout << "Error opening video stream or file" << std::endl;
+    std::cerr<<"No camera detect"<<std::endl;
+    //std::cout << "Error opening video stream or file" << std::endl;
     return -1;
   }
      

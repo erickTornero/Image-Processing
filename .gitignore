@@ -1,3 +1,7 @@
 Debug/
 debug/
 *.jpg
+*.o
+*.out
+exe
+opencv_example
