@@ -21,21 +21,32 @@ int main(){
             for ( int i = 1; i < 5; i = i + 2 ){ 
                 GaussianBlur( grayRowFrame, blurGaussFrame, cv::Size( i, i ), 0, 0 );
             }
-            cv::threshold(blurGaussFrame, thresholdFrame, 80, 255, CV_THRESH_BINARY);
+            cv::threshold(blurGaussFrame, thresholdFrame, 100, 255, CV_THRESH_BINARY);
             cv::imshow("GaussianBlur", blurGaussFrame);
             cv::imshow("Thresholded", thresholdFrame);
+            //cv::Canny(blurGaussFrame, thresholdFrame, 200, 300);
             std::vector<std::vector<cv::Point> > contours;
             std::vector<cv::Vec4i> hierarchy;
             
             cv::findContours(thresholdFrame, contours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE);
             std::vector<std::vector<cv::Point> > contours_poly( contours.size() );
-            std::vector<cv::Rect> boundRect( contours.size() );
+            std::vector<cv::RotatedRect> boundRect( contours.size() );
+            std::vector<cv::RotatedRect> minEllipse( contours.size() );
+            //minRect[i] = minAreaRect( Mat(contours[i]) );
+       //if( contours[i].size() > 5 )
+         //{ minEllipse[i] = fitEllipse( Mat(contours[i]) ); }
+
             for( int i = 0; i< contours.size(); i++ ){
-                // ** Aproximate to a polinomy the contours.
-                approxPolyDP( cv::Mat(contours[i]), contours_poly[i], 3, true );
-                boundRect[i] = cv::boundingRect( cv::Mat(contours_poly[i]) );
-                cv::rectangle( rowFrame, boundRect[i].tl(), boundRect[i].br(), cv::Scalar(100,100,0), 2, 8, 0 );
-                cv::drawContours( rowFrame, contours, i, cv::Scalar(100,100,0), 4, 8, hierarchy, 0, cv::Point() );
+                boundRect[i] = cv::minAreaRect(cv::Mat(contours[i]));
+                if( contours[i].size() > 5 )
+                    minEllipse[i] = cv::fitEllipse( cv::Mat(contours[i]) );
+                //boundRect[i] = cv::boundingRect( cv::Mat(contours_poly[i]) );
+                //cv::rectangle( rowFrame, boundRect[i].tl(), boundRect[i].br(), cv::Scalar(100,100,0), 2, 8, 0 );
+                //cv::drawContours( rowFrame, contours, i, cv::Scalar(100,100,0), 4, 8, hierarchy, 0, cv::Point() );
+                cv::ellipse( rowFrame, minEllipse[i], cv::Scalar(0,255,0), 2, 8 );
+                cv::Point2f rect_points[4]; boundRect[i].points( rect_points );
+                for( int j = 0; j < 4; j++ )
+                    cv::line( rowFrame, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0, 0,255), 4, 8 );
             }
             //cv::minAreaRect(contours);
             
