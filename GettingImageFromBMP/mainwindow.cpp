@@ -19,15 +19,20 @@ void MainWindow::on_pushButton_clicked()
 
     ImageFormatHeader head;
     if(QString::compare(filename, QString()) != 0){
-        unsigned char * data = readBMP(filename.toStdString(), head);
+        int  height, width, size;
+        unsigned char * data = ReadBMP(filename.toStdString(), height, width, size);
+        head.set(height, width, size);
+        //unsigned char * data = readBMP(filename.toStdString(), head);
         //RGB_ ** mat = getImageMatrix(filename.toStdString(), head);
         if(data != nullptr){
             int wdt = head.width;
             int hgh = head.heigh;
-            QImage image(head.heigh, head.width, QImage::Format_RGB888);
-            for(int x = 0; x < image.height(); x++){
-                for(int y = 0; y < image.width(); y++){
-                    image.setPixelColor(x, y, QColor(data[x*hgh*3 + y*3 +0],data[x*hgh*3+y*3 +1],data[x*hgh*3+y*3 +2]));
+
+            QImage image(head.width, head.heigh, QImage::Format_RGB888);
+            for(int x = 0; x < image.width(); x++){
+                for(int y = 0; y < image.height(); y++){
+                    //image.setPixelColor(x, y, QColor(0, 255, 0));
+                    image.setPixelColor(x, y, QColor(data[y*wdt*3 + x*3 +0],data[y*wdt*3+x*3 +1],data[y*wdt*3+x*3 +2]));
                     //image.setPixelColor(x,y,QColor(mat[y][x].red, mat[y][x].green, mat[y][x].blue));
                 }
             }
