@@ -26,30 +26,38 @@ void DFTimage(unsigned char * data, unsigned char * realPart, unsigned char * im
 // void DFT image
 
 unsigned char * DFTimageS(unsigned char * data, int width, int height){
-    double *Pkb = new double[width*height];
-    
+    double *PkbReal = new double[width*height];
+    double *PkbIm = new double[width*height];
     for(int k = 0; k < height; k++){
         for(int b = 0; b < width; b++){
-            double sum = 0;
+            double sumReal = 0.0;
+            double sumIm = 0.0;
             for(int a = 0; a < height; a++){
                 double theta = -2.0*3.1416*k*a/height;
-                sum += (double)data[b + width*a]*cosf(theta);;
+                sumReal += (double)data[b + width*a]*cosf(theta);
+                sumIm += (double)data[b + width*a]*sinf(theta);
             }
-            Pkb[b + width*k] = sum/(double)height;
+            PkbReal[b + width*k] = sumReal/(double)height;
+            PkbIm[b + width*k] = sumIm/(double)height;
         }
     }
     unsigned char * Dft = new unsigned char[width*height];
     for(int k = 0; k < height; k++){
         for(int l = 0; l < width; l++){
-            double sum = 0;
+            double sumReal = 0.0;
+            double sumIm = 0.0;
             for(int b = 0; b < width; b++){
                 double theta = -2.0*3.1416*l*b/width;
-                sum += (double)data[b + k*width]*cosf(theta);
+                sumReal += (double)PkbReal[b + k*width]*cosf(theta) - (double)PkbIm[b+k*width]*sinf(theta);
+                sumIm += (double)PkbReal[b + k*width]*sinf(theta) + (double)PkbIm[b+k*width]*cos(theta);
             }
-            sum = sum/width;
-            Dft[k*width + l] = (unsigned char) sum;
+            sumReal = sumReal/width;
+            sumIm += sumIm/width;
+            sumReal = sqrtf(sumReal*sumReal + sumIm*sumIm);
+            Dft[k*width + l] = (unsigned char) sumReal;
         }
     }
-    delete [] Pkb;
+    delete [] PkbReal;
+    delete [] PkbIm;
     return Dft;
 }
