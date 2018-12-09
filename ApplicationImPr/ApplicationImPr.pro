@@ -31,7 +31,9 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     bmphandle.h \
-    Filters.hpp
+    Filters.hpp \
+    Convolucion.hpp \
+    Miscellaneus.hpp
 
 FORMS += \
         mainwindow.ui

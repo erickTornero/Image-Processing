@@ -13,20 +13,33 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::showImageM(unsigned char * d, int w, int h, QLabel * lbl){
+// Show Image Type 1 means RGB:
+// Type 0 means GrayScale
+void MainWindow::showImageM(unsigned char * d, int w, int h, QLabel * lbl, int formatT = 1){
     if(d != nullptr){
         int wdt = w;
         int hgh = h;
-
-        QImage image(w, h, QImage::Format_RGB888);
-        for(int x = 0; x < image.width(); x++){
-            for(int y = 0; y < image.height(); y++){
-                //image.setPixelColor(x, y, QColor(0, 255, 0));
-                image.setPixelColor(x, y, QColor(d[y*wdt*3 + x*3 +0],d[y*wdt*3+x*3 +1],d[y*wdt*3+x*3 +2]));
-                //image.setPixelColor(x,y,QColor(mat[y][x].red, mat[y][x].green, mat[y][x].blue));
+        QPixmap pix;
+        if(formatT == 1){
+            QImage image(w, h, QImage::Format_RGB888);
+            for(int x = 0; x < image.width(); x++){
+                for(int y = 0; y < image.height(); y++){
+                    image.setPixelColor(x, y, QColor(d[y*wdt*3 + x*3 +0],d[y*wdt*3+x*3 +1],d[y*wdt*3+x*3 +2]));
+                }
             }
+            pix = QPixmap::fromImage(image);
         }
-        QPixmap pix = QPixmap::fromImage(image);
+        else if (formatT == 0) {
+            QImage image(w, h, QImage::Format_Grayscale8);
+            for(int x = 0; x < image.width(); x++){
+                for(int y = 0; y < image.height(); y++){
+                     image.setPixelColor(x, y, QColor(d[y*wdt + x], d[y*wdt + x], d[y*wdt + x]));
+                }
+            }
+            pix = QPixmap::fromImage(image);
+        }
+
+
         lbl->setPixmap(pix);
     }
 }
@@ -97,4 +110,20 @@ void MainWindow::on_polFilter_clicked()
     unsigned char * filtered = PolinomialTransform(coef, data, width, height);
     showImageM(filtered, width, height, ui->labelPolFilter);
     delete filtered;
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    //unsigned char kernell[9] = {1, 3, 1, 3, 9, 3, 1, 3, 1};
+    signed char kernell[9] = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
+    unsigned char * convdata = convolution(data, width, height, kernell, 3, 3);
+    showImageM(convdata, width, height, ui->labelConv);
+    delete convdata;
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    unsigned char * graydata = SimpleEdgeDetector(data, width, height, 100, 200);
+    showImageM(graydata, width, height, ui->labelCanny, 0);
+    delete  graydata;
 }

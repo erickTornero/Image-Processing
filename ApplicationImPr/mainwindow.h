@@ -20,7 +20,11 @@ private slots:
     void on_pushButton_clicked();
 
     void on_polFilter_clicked();
-    void showImageM(unsigned char * data, int w, int h, QLabel * l);
+    void showImageM(unsigned char * data, int w, int h, QLabel * l, int type);
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
 
 private:
     unsigned char * data;
