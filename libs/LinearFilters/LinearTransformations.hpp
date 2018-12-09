@@ -21,3 +21,35 @@ void DFTimage(unsigned char * data, unsigned char * realPart, unsigned char * im
         }
     }
 }
+
+//Save computacional time
+// void DFT image
+
+unsigned char * DFTimageS(unsigned char * data, int width, int height){
+    double *Pkb = new double[width*height];
+    
+    for(int k = 0; k < height; k++){
+        for(int b = 0; b < width; b++){
+            double sum = 0;
+            for(int a = 0; a < height; a++){
+                double theta = -2.0*3.1416*k*a/height;
+                sum += (double)data[b + width*a]*cosf(theta);;
+            }
+            Pkb[b + width*k] = sum/(double)height;
+        }
+    }
+    unsigned char * Dft = new unsigned char[width*height];
+    for(int k = 0; k < height; k++){
+        for(int l = 0; l < width; l++){
+            double sum = 0;
+            for(int b = 0; b < width; b++){
+                double theta = -2.0*3.1416*l*b/width;
+                sum += (double)data[b + k*width]*cosf(theta);
+            }
+            sum = sum/width;
+            Dft[k*width + l] = (unsigned char) sum;
+        }
+    }
+    delete [] Pkb;
+    return Dft;
+}
