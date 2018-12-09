@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QLabel>
 namespace Ui {
 class MainWindow;
 }
@@ -18,7 +19,12 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_polFilter_clicked();
+    void showImageM(unsigned char * data, int w, int h, QLabel * l);
+
 private:
+    unsigned char * data;
+    int width, height;
     Ui::MainWindow *ui;
 };
 

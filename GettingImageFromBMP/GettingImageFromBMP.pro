@@ -30,7 +30,8 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-    bmphandle.h
+    bmphandle.h \
+    Filters.hpp
 
 FORMS += \
         mainwindow.ui
