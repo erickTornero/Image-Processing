@@ -39,10 +39,13 @@ HEADERS += \
 # Cuda files:
 OTHER_FILES += \
     transformations.cu \
-    colorspace.cu
+    colorspace.cu \
+    convolution.cu
 
 CUDA_SOURCES += ./transformations.cu \
-                colorspace.cu
+                colorspace.cu \
+                convolution.cu
+
 CUDA_SDK = "/usr/local/cuda-9.0/"   # Path to cuda SDK install
 CUDA_DIR = "/usr/local/cuda-9.0/"
 
