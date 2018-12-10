@@ -45,6 +45,26 @@ void MainWindow::showImageM(unsigned char * d, int w, int h, QLabel * lbl, int f
         lbl->setPixmap(pix);
     }
 }
+void MainWindow::showImage3Chann(unsigned char * d, int w, int h, std::vector<QLabel * > labels){
+    if(d != nullptr){
+        QImage im1(w, h, QImage::Format_Grayscale8);
+        QImage im2(w, h, QImage::Format_Grayscale8);
+        QImage im3(w, h, QImage::Format_Grayscale8);
+        for(int x = 0; x < im1.width(); x++){
+            for(int y = 0; y < im1.height(); y++){
+                 im1.setPixelColor(x, y, QColor(d[y*w*3 + 3*x], d[y*w*3 + 3*x], d[y*w*3 + 3*x]));
+                 im2.setPixelColor(x, y, QColor(d[y*w*3 + 3*x + 1], d[y*w*3 + 3*x + 1], d[y*w*3 + 3*x + 1]));
+                 im3.setPixelColor(x, y, QColor(d[y*w*3 + 3*x + 2], d[y*w*3 + 3*x + 2], d[y*w*3 + 3*x + 2]));
+            }
+        }
+        QPixmap pix1 = QPixmap::fromImage(im1);
+        QPixmap pix2 = QPixmap::fromImage(im2);
+        QPixmap pix3 = QPixmap::fromImage(im3);
+        labels[0]->setPixmap(pix1);
+        labels[1]->setPixmap(pix2);
+        labels[2]->setPixmap(pix3);
+    }
+}
 void MainWindow::on_pushButton_clicked()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("choose"), "", tr("Images (*.png *.jpg *.jpeg *.bmp *.gif)"));
@@ -141,4 +161,12 @@ void MainWindow::on_pushButton_4_clicked()
     unsigned char * real = DFTimageCuda(grayscale, width, height);
     showImageM(real, width, height, ui->labelFourier, 0);
     delete [] grayscale;
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    unsigned char * hsvData = RGB2HSV(data, height*width);
+    std::vector<QLabel*> lab{ui->labelH, ui->labelS, ui->labelV};
+    showImage3Chann(hsvData, width, height, lab);
+    delete [] hsvData;
 }

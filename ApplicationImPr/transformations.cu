@@ -19,6 +19,30 @@ __global__ void processPixelVertical(unsigned char * data_dev, double * PkbReal_
         PkbIm_dev[b + width*k] = sumIm/(double)height; 
     }
 }
+__global__ void Swap2with4Quadrant(unsigned char * data_dev, int w, int h){
+    int posThread = blockIdx.x*blockDim.x + threadIdx.x;
+    int hmid = h/2, wmid = w/2;
+    if(posThread < hmid*wmid){
+        int j = posThread/wmid;
+        int i = posThread - j*wmid;
+        unsigned char tmp = data_dev[i + j*w];
+        data_dev[i + j*w] = data_dev[w - wmid + i + (hmid+j)*w];
+        data_dev[w - wmid + i + (hmid+j)*w] = tmp;
+    }
+}
+__global__ void Swap1with3Quadrant(unsigned char * data_dev, int w, int h){
+    int posThread = blockIdx.x*blockDim.x + threadIdx.x;
+    int hmid = h/2, wmid = w/2;
+    if(posThread < hmid*wmid){
+        int j = posThread/wmid;
+        int i = posThread - j*wmid + w - wmid;
+        unsigned char tmp = data_dev[i + j*w];
+        data_dev[i + j*w] = data_dev[i - wmid + (hmid+j)*w];
+        data_dev[i - wmid + (hmid+j)*w] = tmp;
+    }
+}
+
+
 __global__ void processPixelHorizontal(unsigned char *data_dev, double * PkbReal_dev, double * PkbIm_dev, int width, int height){
     int posThread = blockIdx.x*blockDim.x + threadIdx.x;
     if(posThread < width*height){
@@ -53,9 +77,17 @@ unsigned char * DFTimageCuda(unsigned char * data, int width, int height){
     processPixelVertical<<<nblocks, nthreads>>>(dataDev, PkbRealDev, PkbImDev, width, height);
     processPixelHorizontal<<<nblocks, nthreads>>>(dataDev, PkbRealDev, PkbImDev, width, height);
     unsigned char * Dft = new unsigned char[width*height];
+    int hmid = height/2, wmid = width/2;
+    nblocks = (wmid*hmid% nthreads > 0) ? wmid*hmid/nthreads + 1: wmid*hmid/nthreads;
+    Swap2with4Quadrant<<<nblocks, nthreads>>>(dataDev, width, height);
+    Swap1with3Quadrant<<<nblocks, nthreads>>>(dataDev, width, height);
+
     cudaMemcpy(Dft, dataDev, width*height*sizeof(unsigned char), cudaMemcpyDeviceToHost);
+
+
     cudaFree(dataDev);
     cudaFree(PkbRealDev);
     cudaFree(PkbImDev);
+
     return Dft;
 }

@@ -44,6 +44,10 @@ public:
     QPushButton *pushButton_3;
     QLabel *labelFourier;
     QPushButton *pushButton_4;
+    QLabel *labelH;
+    QLabel *labelS;
+    QLabel *labelV;
+    QPushButton *pushButton_5;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -52,7 +56,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1464, 872);
+        MainWindow->resize(1658, 872);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         pushButton = new QPushButton(centralWidget);
@@ -120,10 +124,25 @@ public:
         pushButton_4 = new QPushButton(centralWidget);
         pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
         pushButton_4->setGeometry(QRect(1210, 390, 89, 25));
+        labelH = new QLabel(centralWidget);
+        labelH->setObjectName(QStringLiteral("labelH"));
+        labelH->setGeometry(QRect(1030, 470, 181, 271));
+        labelH->setFrameShape(QFrame::Panel);
+        labelS = new QLabel(centralWidget);
+        labelS->setObjectName(QStringLiteral("labelS"));
+        labelS->setGeometry(QRect(1250, 470, 181, 261));
+        labelS->setFrameShape(QFrame::Panel);
+        labelV = new QLabel(centralWidget);
+        labelV->setObjectName(QStringLiteral("labelV"));
+        labelV->setGeometry(QRect(1470, 470, 171, 261));
+        labelV->setFrameShape(QFrame::Box);
+        pushButton_5 = new QPushButton(centralWidget);
+        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
+        pushButton_5->setGeometry(QRect(1250, 760, 141, 41));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1464, 22));
+        menuBar->setGeometry(QRect(0, 0, 1658, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -157,6 +176,10 @@ public:
         pushButton_3->setText(QApplication::translate("MainWindow", "Canny", 0));
         labelFourier->setText(QString());
         pushButton_4->setText(QApplication::translate("MainWindow", "Fourier", 0));
+        labelH->setText(QString());
+        labelS->setText(QString());
+        labelV->setText(QString());
+        pushButton_5->setText(QApplication::translate("MainWindow", "HSV transform", 0));
     } // retranslateUi
 
 };

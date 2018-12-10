@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1464</width>
+    <width>1658</width>
     <height>872</height>
    </rect>
   </property>
@@ -255,13 +255,74 @@ p, li { white-space: pre-wrap; }
      <string>Fourier</string>
     </property>
    </widget>
+   <widget class="QLabel" name="labelH">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>470</y>
+      <width>181</width>
+      <height>271</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Panel</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelS">
+    <property name="geometry">
+     <rect>
+      <x>1250</x>
+      <y>470</y>
+      <width>181</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Panel</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelV">
+    <property name="geometry">
+     <rect>
+      <x>1470</x>
+      <y>470</y>
+      <width>171</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_5">
+    <property name="geometry">
+     <rect>
+      <x>1250</x>
+      <y>760</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>HSV transform</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1464</width>
+     <width>1658</width>
      <height>22</height>
     </rect>
    </property>
