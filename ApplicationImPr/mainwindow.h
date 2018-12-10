@@ -7,6 +7,9 @@
 extern "C"
 unsigned char * DFTimageCuda(unsigned char * data, int width, int height);
 
+extern "C"
+unsigned char * RGB2HSV(unsigned char * data, int npixels);
+
 namespace Ui {
 class MainWindow;
 }
@@ -24,12 +27,15 @@ private slots:
 
     void on_polFilter_clicked();
     void showImageM(unsigned char * data, int w, int h, QLabel * l, int type);
+    void showImage3Chann(unsigned char * data, int w, int h, std::vector<QLabel*> labels);
 
     void on_pushButton_2_clicked();
 
     void on_pushButton_3_clicked();
 
     void on_pushButton_4_clicked();
+
+    void on_pushButton_5_clicked();
 
 private:
     unsigned char * data = nullptr;
