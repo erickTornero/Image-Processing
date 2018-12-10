@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QLabel>
+extern "C"
+unsigned char * DFTimageCuda(unsigned char * data, int width, int height);
+
 namespace Ui {
 class MainWindow;
 }
