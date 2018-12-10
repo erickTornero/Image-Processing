@@ -36,7 +36,7 @@ DISTNAME      = Aplication1.0.0
 DISTDIR = /home/erick/Documentos/MSCS/Images/Image-Processing/ApplicationImPr/.tmp/Aplication1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/erick/anaconda3/lib
-LIBS          = $(SUBLIBS) -L/home/erick/anaconda3/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -fopenmp -L/home/erick/anaconda3/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -159,7 +159,8 @@ DIST          = /home/erick/anaconda3/mkspecs/features/spec_pre.prf \
 		bmphandle.h \
 		Filters.hpp \
 		Convolucion.hpp \
-		Miscellaneus.hpp main.cpp \
+		Miscellaneus.hpp \
+		LinearTransformations.hpp main.cpp \
 		mainwindow.cpp
 QMAKE_TARGET  = Aplication
 DESTDIR       = 
@@ -399,7 +400,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h bmphandle.h Filters.hpp Convolucion.hpp Miscellaneus.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h bmphandle.h Filters.hpp Convolucion.hpp Miscellaneus.hpp LinearTransformations.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
@@ -857,7 +858,8 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		bmphandle.h \
 		Filters.hpp \
 		Miscellaneus.hpp \
-		Convolucion.hpp
+		Convolucion.hpp \
+		LinearTransformations.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

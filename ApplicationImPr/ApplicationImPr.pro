@@ -33,10 +33,13 @@ HEADERS += \
     bmphandle.h \
     Filters.hpp \
     Convolucion.hpp \
-    Miscellaneus.hpp
+    Miscellaneus.hpp \
+    LinearTransformations.hpp
 
 FORMS += \
         mainwindow.ui
+
+LIBS += -fopenmp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

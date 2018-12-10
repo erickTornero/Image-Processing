@@ -26,8 +26,10 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_pushButton_4_clicked();
+
 private:
-    unsigned char * data;
+    unsigned char * data = nullptr;
     int width, height;
     Ui::MainWindow *ui;
 };

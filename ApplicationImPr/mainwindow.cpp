@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "bmphandle.h"
 #include "Filters.hpp"
+#include "LinearTransformations.hpp"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -51,6 +53,8 @@ void MainWindow::on_pushButton_clicked()
     if(QString::compare(filename, QString()) != 0){
         //int  height, width, size;
         int size;
+        if(data != nullptr)
+            delete [] data;
         data = ReadBMP(filename.toStdString(), height, width, size);
 
         head.set(height, width, size);
@@ -126,4 +130,13 @@ void MainWindow::on_pushButton_3_clicked()
     unsigned char * graydata = SimpleEdgeDetector(data, width, height, 100, 200);
     showImageM(graydata, width, height, ui->labelCanny, 0);
     delete  graydata;
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+
+    unsigned char * img;
+    unsigned char * grayscale = RGB2Gray(data, width*height*3);
+    unsigned char * real = DFTimageS(grayscale, width, height);
+    showImageM(real, width, height, ui->labelFourier, 0);
 }

@@ -42,6 +42,8 @@ public:
     QLabel *labelImage;
     QLabel *labelCanny;
     QPushButton *pushButton_3;
+    QLabel *labelFourier;
+    QPushButton *pushButton_4;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -50,7 +52,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1029, 872);
+        MainWindow->resize(1464, 872);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         pushButton = new QPushButton(centralWidget);
@@ -87,7 +89,7 @@ public:
         labelPolFilter->setGeometry(QRect(600, 50, 371, 341));
         labelPolFilter->setAutoFillBackground(true);
         labelPolFilter->setFrameShape(QFrame::Box);
-        labelPolFilter->setAlignment(Qt::AlignJustify|Qt::AlignVCenter);
+        labelPolFilter->setAlignment(Qt::AlignCenter);
         labelConv = new QLabel(centralWidget);
         labelConv->setObjectName(QStringLiteral("labelConv"));
         labelConv->setGeometry(QRect(50, 460, 401, 291));
@@ -100,20 +102,28 @@ public:
         labelImage->setObjectName(QStringLiteral("labelImage"));
         labelImage->setGeometry(QRect(60, 50, 429, 329));
         labelImage->setFrameShape(QFrame::Box);
-        labelImage->setScaledContents(true);
+        labelImage->setScaledContents(false);
         labelImage->setAlignment(Qt::AlignCenter);
         labelImage->setMargin(0);
         labelCanny = new QLabel(centralWidget);
         labelCanny->setObjectName(QStringLiteral("labelCanny"));
         labelCanny->setGeometry(QRect(590, 460, 361, 291));
         labelCanny->setFrameShape(QFrame::Panel);
+        labelCanny->setAlignment(Qt::AlignCenter);
         pushButton_3 = new QPushButton(centralWidget);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
         pushButton_3->setGeometry(QRect(740, 760, 89, 25));
+        labelFourier = new QLabel(centralWidget);
+        labelFourier->setObjectName(QStringLiteral("labelFourier"));
+        labelFourier->setGeometry(QRect(1090, 50, 321, 341));
+        labelFourier->setFrameShape(QFrame::Box);
+        pushButton_4 = new QPushButton(centralWidget);
+        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
+        pushButton_4->setGeometry(QRect(1210, 390, 89, 25));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1029, 22));
+        menuBar->setGeometry(QRect(0, 0, 1464, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -145,6 +155,8 @@ public:
         labelImage->setText(QString());
         labelCanny->setText(QString());
         pushButton_3->setText(QApplication::translate("MainWindow", "Canny", 0));
+        labelFourier->setText(QString());
+        pushButton_4->setText(QApplication::translate("MainWindow", "Fourier", 0));
     } // retranslateUi
 
 };
