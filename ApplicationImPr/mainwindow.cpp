@@ -137,6 +137,8 @@ void MainWindow::on_pushButton_4_clicked()
 
     unsigned char * img;
     unsigned char * grayscale = RGB2Gray(data, width*height*3);
-    unsigned char * real = DFTimageS(grayscale, width, height);
+    //unsigned char * real = DFTimageS(grayscale, width, height);
+    unsigned char * real = DFTimageCuda(grayscale, width, height);
     showImageM(real, width, height, ui->labelFourier, 0);
+    delete [] grayscale;
 }
