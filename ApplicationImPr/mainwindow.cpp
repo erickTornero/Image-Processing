@@ -140,7 +140,7 @@ void MainWindow::on_pushButton_2_clicked()
 {
     //unsigned char kernell[9] = {1, 3, 1, 3, 9, 3, 1, 3, 1};
     signed char kernell[9] = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
-    unsigned char * convdata = convolution(data, width, height, kernell, 3, 3);
+    unsigned char * convdata = convolutionGPU(data, width, height, kernell, 3, 3);
     showImageM(convdata, width, height, ui->labelConv);
     delete convdata;
 }

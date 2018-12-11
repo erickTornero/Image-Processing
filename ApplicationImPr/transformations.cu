@@ -56,8 +56,11 @@ __global__ void processPixelHorizontal(unsigned char *data_dev, double * PkbReal
             sumIm += (double)PkbReal_dev[b + k*width]*sinf(theta) + (double)PkbIm_dev[b+k*width]*cos(theta);
         }
         sumReal = sumReal/width;
-        sumIm += sumIm/width;
-        sumReal = sqrtf(sumReal*sumReal + sumIm*sumIm);
+        sumIm = sumIm/width;
+        double c = 255.0/log2f(1.0 + 10.0);
+        sumReal = c*log2f(1 + sqrtf(sumReal*sumReal + sumIm*sumIm));
+        sumReal = (sumReal > 255.0)? 255.0:sumReal;
+        sumReal = (sumReal < 0.0)? 0:sumReal;
         data_dev[k*width + l] = (unsigned char) sumReal;
     }
 }

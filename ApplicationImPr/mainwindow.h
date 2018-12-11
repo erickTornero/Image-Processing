@@ -10,6 +10,9 @@ unsigned char * DFTimageCuda(unsigned char * data, int width, int height);
 extern "C"
 unsigned char * RGB2HSV(unsigned char * data, int npixels);
 
+extern "C"
+unsigned char * convolutionGPU(unsigned char * rowdata, int width, int height, signed char * kernell, int kernelSize, int nchann);
+
 namespace Ui {
 class MainWindow;
 }

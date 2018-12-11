@@ -5,3 +5,4 @@ debug/
 *.out
 exe
 opencv_example
+*.pro.user
