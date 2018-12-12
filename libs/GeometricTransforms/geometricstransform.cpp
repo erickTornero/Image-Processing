@@ -1,7 +1,7 @@
 # include <iostream>
 # include <vector>
 # include <string.h>
-
+# include <math.h>
 void printm(float ** m, int nrows, int ncols){
     for(int i = 0; i < nrows; i++){
         for(int j = 0; j < ncols; j++){
@@ -50,6 +50,7 @@ void SwapRows(float ** matrix, int row1, int row2, int ncols){
     }
 }
 
+
 void SwapVector(float * av, int pos1, int pos2){
     float tmp = av[pos1];
     av[pos1] = av[pos2];
@@ -59,7 +60,7 @@ void SwapVector(float * av, int pos1, int pos2){
 int GetMaxRowItem(float ** matrix, int currCol, int nrows){
     int maxRow = currCol;
     for(int i = currCol + 1; i < nrows; i++){
-        maxRow = (abs(matrix[i][currCol]) > abs(matrix[maxRow][currCol])) ? i : maxRow;
+        maxRow = (std::abs(matrix[i][currCol]) > std::abs(matrix[maxRow][currCol])) ? i : maxRow;
     }
     return maxRow;
 }
@@ -93,8 +94,7 @@ float * PartialPivotGauss(float ** matrix, float * X, int nrows, int ncols){
         Lmat[p] = new float[ncols];
         memset(Lmat[p], 0.0, ncols);
     }
-    for(int k = 0; k < nrows; k++)
-        Lmat[k][k] = 1.0;
+    
 
     for(int i = 0; i < nrows; i++){
         int maxR = GetMaxRowItem(matrix, i, nrows);
@@ -102,6 +102,7 @@ float * PartialPivotGauss(float ** matrix, float * X, int nrows, int ncols){
         if(maxR > i){
             SwapRows(matrix, i, maxR, ncols);
             SwapVector(X, i, maxR);
+            SwapRows(Lmat, i, maxR, ncols);
             // Save Permutation
         }
         // Avoid division by 0;
@@ -118,14 +119,16 @@ float * PartialPivotGauss(float ** matrix, float * X, int nrows, int ncols){
                 Lmat[j][i] = -mm;
             }
         }
-        //std::cout<<"**********************"<<std::endl;
-        //std::cout<<"Iteracion: "<<i<< ": matrix U:\n";
-        //printm(matrix, nrows, ncols);
-        //std::cout<<std::endl<<std::endl<<"Matrix L\n";
-        //printm(Lmat, nrows, ncols) ;   
-        //std::cout<<std::endl<<std::endl<<"Augment\n";
-        //printvector(X, nrows);
+        std::cout<<"**********************"<<std::endl;
+        std::cout<<"Iteracion: "<<i<< ": matrix U:\n";
+        printm(matrix, nrows, ncols);
+        std::cout<<std::endl<<std::endl<<"Matrix L\n";
+        printm(Lmat, nrows, ncols) ;   
+        std::cout<<std::endl<<std::endl<<"Augment\n";
+        printvector(X, nrows);
     }
+    for(int i = 0; i < nrows; i++)
+        Lmat[i][i] = 1.0;
     for(int i = 0; i < nrows; i++){
         if(changearr[i] > i){
             float tmp = X[changearr[i]];
@@ -135,12 +138,12 @@ float * PartialPivotGauss(float ** matrix, float * X, int nrows, int ncols){
     }
     // The matrix is returned.
     float * solvematrix = SolveTriangularLowerMatrix(Lmat, X, nrows, ncols);
-    //std::cout <<"Solve L matrix\n";
-    //printvector(solvematrix, nrows);
+    std::cout <<"Solve L matrix\n";
+    printvector(solvematrix, nrows);
     float * solution = SolveTriangularUpperMatrix(matrix, solvematrix, nrows, ncols);
-    //float **mat = MultiplyMatrixes(Lmat, matrix, nrows, ncols, nrows);
+    float **mat = MultiplyMatrixes(Lmat, matrix, nrows, ncols, nrows);
     
-    //printm(mat, nrows, ncols);
+    printm(mat, nrows, ncols);
     delete [] solvematrix;
     return solution;
 }
@@ -181,30 +184,32 @@ void ComputeBilinearCoeff(unsigned char * X1, unsigned char * Y1, unsigned char 
 }
 
 int main(){
-
-    float a[3][3] = {{1.0, 3.0, 5.0}, {6.0, 3.0,3.0}, {3.0, 1.0, 1.0}};
-    float ** m = new float*[3];
-    float * X = new float[3];
-    X[0] = 29.4; 
-    X[1] = 20.4;
-    X[2] = 7.0;
-    for( int i = 0; i < 3; i++){
-        m[i] = new float[3];
+    int szM = 4;
+    //float a[szM][szM] = {{2.0, 1.0, 1.0, 0.0}, {4.0, 3.0, 3.0, 1.0}, {8.0, 7.0, 9.0, 5.0},{6.0, 7.0, 9.0, 8.0}};
+    float a[szM][szM] = {{0.0, 0.0, 0.0, 1.0}, {300.0, 0.0, 0.0, 1.0}, {0.0, 300.0, 0.0, 1.0},{300.0, 300.0, 90000.0, 1.0}};
+    float ** m = new float*[szM];
+    float * X = new float[szM];
+    X[0] = 120.0; 
+    X[1] = 292.0;
+    X[2] = 0.0;
+    X[3] = 300.0; 
+    for( int i = 0; i < szM; i++){
+        m[i] = new float[szM];
     }
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++){
+    for(int i = 0; i < szM; i++){
+        for(int j = 0; j < szM; j++){
             m[i][j] = a[i][j];
         }
     }
-    printm(m, 3, 3);
-    float * solution = PartialPivotGauss(m, X, 3, 3);
+    printm(m, szM, szM);
+    float * solution = PartialPivotGauss(m, X, szM, szM);
     std::cout<<std::endl<<std::endl;
     std::cout<<std::endl<<std::endl;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < szM; i++){
         std::cout<<X[i]<<"\t";
     }
     std::cout<<std::endl<<std::endl;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < szM; i++){
         std::cout<<solution[i]<<"\t";
     }
     std::cout<<std::endl;
