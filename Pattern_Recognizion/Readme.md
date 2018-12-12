@@ -1,3 +1,8 @@
+*Warning: New location for Camera calibration:*
+
+`https://github.com/erickTornero/Camera-Calibration`
+
+
 ## Requirements
 * c++11
 * Opencv 3.4
