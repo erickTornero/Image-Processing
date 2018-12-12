@@ -34,7 +34,8 @@ HEADERS += \
     Filters.hpp \
     Convolucion.hpp \
     Miscellaneus.hpp \
-    LinearTransformations.hpp
+    LinearTransformations.hpp \
+    geometricstransform.hpp
 
 # Cuda files:
 OTHER_FILES += \

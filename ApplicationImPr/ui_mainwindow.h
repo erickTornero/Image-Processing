@@ -48,6 +48,8 @@ public:
     QLabel *labelS;
     QLabel *labelV;
     QPushButton *pushButton_5;
+    QLabel *labelBilinear;
+    QPushButton *pushButton_6;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -56,7 +58,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1658, 872);
+        MainWindow->resize(1833, 872);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         pushButton = new QPushButton(centralWidget);
@@ -116,7 +118,7 @@ public:
         labelCanny->setAlignment(Qt::AlignCenter);
         pushButton_3 = new QPushButton(centralWidget);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        pushButton_3->setGeometry(QRect(740, 760, 89, 25));
+        pushButton_3->setGeometry(QRect(720, 760, 121, 25));
         labelFourier = new QLabel(centralWidget);
         labelFourier->setObjectName(QStringLiteral("labelFourier"));
         labelFourier->setGeometry(QRect(1090, 50, 321, 341));
@@ -139,10 +141,17 @@ public:
         pushButton_5 = new QPushButton(centralWidget);
         pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
         pushButton_5->setGeometry(QRect(1250, 760, 141, 41));
+        labelBilinear = new QLabel(centralWidget);
+        labelBilinear->setObjectName(QStringLiteral("labelBilinear"));
+        labelBilinear->setGeometry(QRect(1480, 40, 341, 351));
+        labelBilinear->setFrameShape(QFrame::Box);
+        pushButton_6 = new QPushButton(centralWidget);
+        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
+        pushButton_6->setGeometry(QRect(1570, 400, 89, 25));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1658, 22));
+        menuBar->setGeometry(QRect(0, 0, 1833, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -173,13 +182,15 @@ public:
         pushButton_2->setText(QApplication::translate("MainWindow", "Convolution", 0));
         labelImage->setText(QString());
         labelCanny->setText(QString());
-        pushButton_3->setText(QApplication::translate("MainWindow", "Canny", 0));
+        pushButton_3->setText(QApplication::translate("MainWindow", "Edge Detector", 0));
         labelFourier->setText(QString());
         pushButton_4->setText(QApplication::translate("MainWindow", "Fourier", 0));
         labelH->setText(QString());
         labelS->setText(QString());
         labelV->setText(QString());
         pushButton_5->setText(QApplication::translate("MainWindow", "HSV transform", 0));
+        labelBilinear->setText(QString());
+        pushButton_6->setText(QApplication::translate("MainWindow", "Bilinear", 0));
     } // retranslateUi
 
 };

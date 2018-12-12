@@ -52,6 +52,7 @@ SOURCES       = main.cpp \
 		mainwindow.cpp moc_mainwindow.cpp
 OBJECTS       = transformations_cuda.o \
 		colorspace_cuda.o \
+		convolution_cuda.o \
 		main.o \
 		mainwindow.o \
 		moc_mainwindow.o
@@ -163,7 +164,8 @@ DIST          = transformations.cu \
 		Filters.hpp \
 		Convolucion.hpp \
 		Miscellaneus.hpp \
-		LinearTransformations.hpp main.cpp \
+		LinearTransformations.hpp \
+		geometricstransform.hpp main.cpp \
 		mainwindow.cpp
 QMAKE_TARGET  = Aplication
 DESTDIR       = 
@@ -403,8 +405,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents transformations.cu colorspace.cu $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h bmphandle.h Filters.hpp Convolucion.hpp Miscellaneus.hpp LinearTransformations.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents transformations.cu colorspace.cu convolution.cu $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h bmphandle.h Filters.hpp Convolucion.hpp Miscellaneus.hpp LinearTransformations.hpp geometricstransform.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
@@ -429,9 +431,9 @@ check: first
 
 benchmark: first
 
-compiler_cuda_make_all: transformations_cuda.o colorspace_cuda.o
+compiler_cuda_make_all: transformations_cuda.o colorspace_cuda.o convolution_cuda.o
 compiler_cuda_clean:
-	-$(DEL_FILE) transformations_cuda.o colorspace_cuda.o
+	-$(DEL_FILE) transformations_cuda.o colorspace_cuda.o convolution_cuda.o
 transformations_cuda.o: /usr/local/cuda-9.0/include/cuda.h \
 		/usr/local/cuda-9.0/include/cuda_runtime.h \
 		/usr/local/cuda-9.0/include/host_config.h \
@@ -551,6 +553,66 @@ colorspace_cuda.o: /usr/local/cuda-9.0/include/cuda.h \
 		/usr/local/cuda-9.0/include/device_launch_parameters.h \
 		colorspace.cu
 	/usr/local/cuda-9.0//bin/nvcc --use_fast_math -I"/usr/local/cuda-9.0//include" --machine 64 -arch=sm_30 -c -o colorspace_cuda.o colorspace.cu
+
+convolution_cuda.o: /usr/local/cuda-9.0/include/cuda.h \
+		/usr/local/cuda-9.0/include/cuda_runtime.h \
+		/usr/local/cuda-9.0/include/host_config.h \
+		/usr/local/cuda-9.0/include/crt/host_config.h \
+		/usr/local/cuda-9.0/include/builtin_types.h \
+		/usr/local/cuda-9.0/include/device_types.h \
+		/usr/local/cuda-9.0/include/host_defines.h \
+		/usr/local/cuda-9.0/include/crt/host_defines.h \
+		/usr/local/cuda-9.0/include/driver_types.h \
+		/usr/local/cuda-9.0/include/vector_types.h \
+		/usr/local/cuda-9.0/include/surface_types.h \
+		/usr/local/cuda-9.0/include/texture_types.h \
+		/usr/local/cuda-9.0/include/library_types.h \
+		/usr/local/cuda-9.0/include/channel_descriptor.h \
+		/usr/local/cuda-9.0/include/cuda_runtime_api.h \
+		/usr/local/cuda-9.0/include/cuda_device_runtime_api.h \
+		/usr/local/cuda-9.0/include/driver_functions.h \
+		/usr/local/cuda-9.0/include/vector_functions.h \
+		/usr/local/cuda-9.0/include/vector_functions.hpp \
+		/usr/local/cuda-9.0/include/device_functions.h \
+		/usr/local/cuda-9.0/include/crt/device_functions.h \
+		/usr/local/cuda-9.0/include/crt/device_functions.hpp \
+		/usr/local/cuda-9.0/include/device_atomic_functions.h \
+		/usr/local/cuda-9.0/include/device_atomic_functions.hpp \
+		/usr/local/cuda-9.0/include/crt/device_double_functions.h \
+		/usr/local/cuda-9.0/include/crt/device_double_functions.hpp \
+		/usr/local/cuda-9.0/include/sm_20_atomic_functions.h \
+		/usr/local/cuda-9.0/include/sm_20_atomic_functions.hpp \
+		/usr/local/cuda-9.0/include/sm_32_atomic_functions.h \
+		/usr/local/cuda-9.0/include/sm_32_atomic_functions.hpp \
+		/usr/local/cuda-9.0/include/sm_35_atomic_functions.h \
+		/usr/local/cuda-9.0/include/sm_60_atomic_functions.h \
+		/usr/local/cuda-9.0/include/sm_60_atomic_functions.hpp \
+		/usr/local/cuda-9.0/include/sm_20_intrinsics.h \
+		/usr/local/cuda-9.0/include/sm_20_intrinsics.hpp \
+		/usr/local/cuda-9.0/include/sm_30_intrinsics.h \
+		/usr/local/cuda-9.0/include/sm_30_intrinsics.hpp \
+		/usr/local/cuda-9.0/include/sm_32_intrinsics.h \
+		/usr/local/cuda-9.0/include/sm_32_intrinsics.hpp \
+		/usr/local/cuda-9.0/include/sm_35_intrinsics.h \
+		/usr/local/cuda-9.0/include/sm_61_intrinsics.h \
+		/usr/local/cuda-9.0/include/sm_61_intrinsics.hpp \
+		/usr/local/cuda-9.0/include/crt/sm_70_rt.h \
+		/usr/local/cuda-9.0/include/crt/sm_70_rt.hpp \
+		/usr/local/cuda-9.0/include/surface_functions.h \
+		/usr/local/cuda-9.0/include/cuda_surface_types.h \
+		/usr/local/cuda-9.0/include/texture_fetch_functions.h \
+		/usr/local/cuda-9.0/include/cuda_texture_types.h \
+		/usr/local/cuda-9.0/include/texture_indirect_functions.h \
+		/usr/local/cuda-9.0/include/surface_indirect_functions.h \
+		/usr/local/cuda-9.0/include/common_functions.h \
+		/usr/local/cuda-9.0/include/crt/common_functions.h \
+		/usr/local/cuda-9.0/include/crt/math_functions.h \
+		/usr/local/cuda-9.0/include/crt/func_macro.h \
+		/usr/local/cuda-9.0/include/crt/math_functions.hpp \
+		/usr/local/cuda-9.0/include/math_constants.h \
+		/usr/local/cuda-9.0/include/device_launch_parameters.h \
+		convolution.cu
+	/usr/local/cuda-9.0//bin/nvcc --use_fast_math -I"/usr/local/cuda-9.0//include" --machine 64 -arch=sm_30 -c -o convolution_cuda.o convolution.cu
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
@@ -986,7 +1048,8 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		Filters.hpp \
 		Miscellaneus.hpp \
 		Convolucion.hpp \
-		LinearTransformations.hpp
+		LinearTransformations.hpp \
+		geometricstransform.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

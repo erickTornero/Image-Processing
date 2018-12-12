@@ -3,6 +3,7 @@
 #include "bmphandle.h"
 #include "Filters.hpp"
 #include "LinearTransformations.hpp"
+#include "geometricstransform.hpp"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -169,4 +170,15 @@ void MainWindow::on_pushButton_5_clicked()
     std::vector<QLabel*> lab{ui->labelH, ui->labelS, ui->labelV};
     showImage3Chann(hsvData, width, height, lab);
     delete [] hsvData;
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    int x1[4] = {0, width, 0, width};
+    int y1[4] = {0, 0, height, height};
+    int x2[4] = {2*width/8, 7*width/8, 0, width};
+    int y2[4] = {0, 0, height, height};
+    unsigned char * bilinear = Bilinear(data, x1, y1, x2, y2, width, height);
+    showImageM(bilinear, width, height, ui->labelBilinear);
+    delete [] bilinear;
 }

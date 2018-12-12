@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1658</width>
+    <width>1833</width>
     <height>872</height>
    </rect>
   </property>
@@ -216,14 +216,14 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>740</x>
+      <x>720</x>
       <y>760</y>
-      <width>89</width>
+      <width>121</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Canny</string>
+     <string>Edge Detector</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelFourier">
@@ -316,13 +316,42 @@ p, li { white-space: pre-wrap; }
      <string>HSV transform</string>
     </property>
    </widget>
+   <widget class="QLabel" name="labelBilinear">
+    <property name="geometry">
+     <rect>
+      <x>1480</x>
+      <y>40</y>
+      <width>341</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>1570</x>
+      <y>400</y>
+      <width>89</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Bilinear</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1658</width>
+     <width>1833</width>
      <height>22</height>
     </rect>
    </property>
