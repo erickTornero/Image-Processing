@@ -87,7 +87,7 @@ float * SolveTriangularLowerMatrix(float ** matrix, T * X, int nrows, int ncols)
     }
     return ans;
 }
-float * PartialPivotGauss(float ** matrix, int * X, int nrows, int ncols, float * solution){
+void PartialPivotGauss(float ** matrix, int * X, int nrows, int ncols, float * solution){
     int changearr[nrows];
     float ** Lmat = new float*[nrows];
     for(int p = 0; p < nrows; p++){
@@ -146,7 +146,7 @@ float * PartialPivotGauss(float ** matrix, int * X, int nrows, int ncols, float 
     
     //printm(mat, nrows, ncols);
     delete [] solvematrix;
-    return solution;
+    //return solution;
 }
 void ComputeBilinearCoeff(int * X1, int * Y1, int * X2, int * Y2, float * coefX, float * coefY, int nPairpoints){
     //Four points is espected
@@ -170,22 +170,28 @@ void ComputeBilinearCoeff(int * X1, int * Y1, int * X2, int * Y2, float * coefX,
         TransformY[i][3] = 1.0;
     }
     printm(TransformX, 4, 4);
-    float * Bx = new float[nPairpoints];
-    float * By = new float[nPairpoints];
-    std::cout<<"X20 "<<X2[0]<<" X21 "<<X2[1]<<std::endl;
-    Bx[0] = 120.0;
-    std::cout<<"B 0 "<<Bx[0]<<std::endl;
-    Bx[1] = (float)X2[1]; Bx[2] = (float)X2[2]; Bx[3] = (float)X2[3];
-    By[0] = (float)Y2[0]; By[1] = (float)Y2[1]; By[2] = (float)Y2[2]; By[3] = (float)Y2[3];
+    printm(TransformY, 4, 4);
+    int * Bx = new int[nPairpoints];
+    int * By = new int[nPairpoints];
+    //std::cout<<"X20 "<<X2[0]<<" X21 "<<X2[1]<<std::endl;
+    //
+    //std::cout<<"B 0 "<<Bx[0]<<std::endl;
+    Bx[0] = X2[0]; Bx[1] = X2[1]; Bx[2] = X2[2]; Bx[3] = X2[3];
+    By[0] = Y2[0]; By[1] = Y2[1]; By[2] = Y2[2]; By[3] = Y2[3];
 
-    PartialPivotGauss(TransformX, X2, nPairpoints, nPairpoints, coefX);
-    PartialPivotGauss(TransformY, Y2, nPairpoints, nPairpoints, coefY);
+    PartialPivotGauss(TransformX, Bx, nPairpoints, nPairpoints, coefX);
+    PartialPivotGauss(TransformY, By, nPairpoints, nPairpoints, coefY);
     //printvector(coefX, 4);
     //printvector(Bx, 4);
     //printvector(By, 4);
     
     delete [] Bx;
     delete [] By;
+    // Clean Transform X & Transform Y
+    for(int i = 0; i < nPairpoints; i++){
+        delete [] TransformX[i];
+        delete [] TransformY[i];
+    }
     delete [] TransformX;
     delete [] TransformY;
     // Coefficients X:
@@ -196,14 +202,14 @@ void ComputeBilinearCoeff(int * X1, int * Y1, int * X2, int * Y2, float * coefX,
     
 }
 
-unsigned char * Bilinear(unsigned char * data, int * X1, int * Y1, int * X2, int * Y2, int w, int h){
+unsigned char * Bilinear(unsigned char * data, unsigned char * BilinearData, int * X1, int * Y1, int * X2, int * Y2, int w, int h){
     float * coefX = new float[4];
     float * coefY = new float[4];
     ComputeBilinearCoeff(X1, Y1, X2, Y2, coefX, coefY, 4);
-    unsigned char * BilinearData = new unsigned char[w*h*3];
-    memset(BilinearData, 0, w*h*3*sizeof(unsigned char));
-    for(int i = 0; i < h; i++){
-        for(int j = 0; j < w; j++){
+    //unsigned char * BilinearData = new unsigned char[w*h*3];
+    memset(BilinearData, 0, w*h*3);
+    for(int i = 0; i < w; i++){
+        for(int j = 0; j < h; j++){
             float d[4] = {(float)i, (float)j, (float)i*j, 1.0};
             int xpos = DotProduct(coefX, d, 4);
             int ypos = DotProduct(coefY, d, 4);
@@ -213,9 +219,12 @@ unsigned char * Bilinear(unsigned char * data, int * X1, int * Y1, int * X2, int
             BilinearData[xpos*3 + ypos*w*3 + 2] = data[i*3 + w*j*3 + 2];
         }
     }
+    delete [] coefX;
+    delete [] coefY;
+    std::cout<<"Finish mapping"<<std::endl;
     //printvector(coefX, 4);
     //printvector(coefY, 4);
-    return BilinearData;
+    //return BilinearData;
 }
 /*
 int main(){

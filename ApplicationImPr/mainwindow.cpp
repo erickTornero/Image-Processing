@@ -41,8 +41,7 @@ void MainWindow::showImageM(unsigned char * d, int w, int h, QLabel * lbl, int f
             }
             pix = QPixmap::fromImage(image);
         }
-
-
+        //lbl->resize(w, h);
         lbl->setPixmap(pix);
     }
 }
@@ -132,7 +131,7 @@ void MainWindow::on_polFilter_clicked()
     else
         coef.push_back(0);
 
-    unsigned char * filtered = PolinomialTransform(coef, data, width, height);
+    unsigned char * filtered = PolinomialTransform(coef, data, width, height, 3);
     showImageM(filtered, width, height, ui->labelPolFilter);
     delete filtered;
 }
@@ -143,25 +142,27 @@ void MainWindow::on_pushButton_2_clicked()
     signed char kernell[9] = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
     unsigned char * convdata = convolutionGPU(data, width, height, kernell, 3, 3);
     showImageM(convdata, width, height, ui->labelConv);
-    delete convdata;
+    delete [] convdata;
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
     unsigned char * graydata = SimpleEdgeDetector(data, width, height, 100, 200);
     showImageM(graydata, width, height, ui->labelCanny, 0);
-    delete  graydata;
+    delete  [] graydata;
 }
 
 void MainWindow::on_pushButton_4_clicked()
 {
-
-    unsigned char * img;
     unsigned char * grayscale = RGB2Gray(data, width*height*3);
     //unsigned char * real = DFTimageS(grayscale, width, height);
     unsigned char * real = DFTimageCuda(grayscale, width, height);
-    showImageM(real, width, height, ui->labelFourier, 0);
+    std::vector<double> c{2.5, 0};
+    unsigned char * highBrigh = PolinomialTransform(c, real, width, height, 1);
+    showImageM(highBrigh, width, height, ui->labelFourier, 0);
     delete [] grayscale;
+    delete [] real;
+    delete [] highBrigh;
 }
 
 void MainWindow::on_pushButton_5_clicked()
@@ -174,11 +175,14 @@ void MainWindow::on_pushButton_5_clicked()
 
 void MainWindow::on_pushButton_6_clicked()
 {
-    int x1[4] = {0, width, 0, width};
-    int y1[4] = {0, 0, height, height};
-    int x2[4] = {2*width/8, 7*width/8, 0, width};
-    int y2[4] = {0, 0, height, height};
-    unsigned char * bilinear = Bilinear(data, x1, y1, x2, y2, width, height);
+    int x1[4] = {0, width-1, 0, width-1};
+    int y1[4] = {0, 0, height-1, height-1};
+    int x2[4] = {2*width/8, 7*width/8, 0, width-1};
+    int y2[4] = {0, 0, height-1, height-1};
+    unsigned char * bilinear = new unsigned char[width*height*3];
+    Bilinear(data, bilinear, x1, y1, x2, y2, width, height);
+    //ui->labelBilinear->clear();
     showImageM(bilinear, width, height, ui->labelBilinear);
+    std::cout<<"Previous to delete\n";
     delete [] bilinear;
 }
