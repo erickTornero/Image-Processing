@@ -3,8 +3,8 @@
 # include "Convolucion.hpp"
 # include <math.h>
 unsigned char EvaluatePolynomial(const std::vector<double> & pol, unsigned char pixel);
-unsigned char * PolinomialTransform(const std::vector<double> & coeff, unsigned char * data, int width, int height){
-    int size = 3*height*width;
+unsigned char * PolinomialTransform(const std::vector<double> & coeff, unsigned char * data, int width, int height, int nchann){
+    int size = nchann*height*width;
     if( size > 0){
         unsigned char * dataFiltered = new unsigned char[size];
         for(int i = 0; i < size; i++){
