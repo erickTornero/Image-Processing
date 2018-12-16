@@ -65,7 +65,7 @@ A Brightness Global Operator was apply after the Fourer Transform to get an imag
 
 ## run the application
 
-`./Aplication
+`./Aplication`
 
 
 # Examples of execution Aplication
