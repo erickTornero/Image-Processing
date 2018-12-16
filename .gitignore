@@ -8,3 +8,5 @@ opencv_example
 *.pro.user
 
 Aplication
+
+*.user
