@@ -138,11 +138,72 @@ void MainWindow::on_polFilter_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    //unsigned char kernell[9] = {1, 3, 1, 3, 9, 3, 1, 3, 1};
-    signed char kernell[9] = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
-    unsigned char * convdata = convolutionGPU(data, width, height, kernell, 3, 3);
-    showImageM(convdata, width, height, ui->labelConv);
-    delete [] convdata;
+    signed char kernellGauss[9] = {1, 3, 1, 3, 9, 3, 1, 3, 1};
+    signed char kernellPerfil[9] = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
+    int v = ui->horizontalSlider->value();
+    //std::cout<<"Val->"<<v<<std::endl;
+    if(v >= 0){
+        unsigned char * convdata = nullptr;
+        unsigned char * otherData = nullptr;
+        for(int pp = 0; pp < v; pp++){
+            if(pp == 0)
+                convdata = convolutionGPU(data, width, height, kernellGauss, 3, 3);
+            else{
+                if(pp % 2 != 0){
+                    otherData = convolutionGPU(convdata, width, height, kernellGauss, 3, 3);
+                    delete [] convdata;
+                }
+                else{
+                    convdata = convolutionGPU(otherData, width, height, kernellGauss, 3, 3);
+                    delete [] otherData;
+                }
+
+            }
+
+        }
+        if(v == 0)
+            showImageM(data, width, height, ui->labelConv);
+        else if (v % 2 != 0){
+            showImageM(convdata, width, height, ui->labelConv);
+            delete [] convdata;
+        }
+        else{
+            showImageM(otherData, width, height, ui->labelConv);
+            delete [] otherData;
+        }
+    }
+    else{
+        unsigned char * convdata = nullptr;
+        unsigned char * otherData = nullptr;
+        v = -v;
+        for(int pp = 0; pp < v; pp++){
+            if(pp == 0)
+                convdata = convolutionGPU(data, width, height, kernellPerfil, 3, 3);
+            else{
+                if(pp % 2 != 0){
+                    otherData = convolutionGPU(convdata, width, height, kernellPerfil, 3, 3);
+                    delete [] convdata;
+                }
+                else{
+                    convdata = convolutionGPU(otherData, width, height, kernellPerfil, 3, 3);
+                    delete [] otherData;
+                }
+            }
+
+        }
+        if (v % 2 != 0){
+            showImageM(convdata, width, height, ui->labelConv);
+            delete [] convdata;
+        }
+        else{
+            showImageM(otherData, width, height, ui->labelConv);
+            delete [] otherData;
+        }
+    }
+
+    //showImageM(convdata, width, height, ui->labelConv);
+
+    //delete [] convdata;
 }
 
 void MainWindow::on_pushButton_3_clicked()
@@ -179,10 +240,20 @@ void MainWindow::on_pushButton_6_clicked()
     int y1[4] = {0, 0, height-1, height-1};
     int x2[4] = {2*width/8, 7*width/8, 0, width-1};
     int y2[4] = {0, 0, height-1, height-1};
+
+
     unsigned char * bilinear = new unsigned char[width*height*3];
     Bilinear(data, bilinear, x1, y1, x2, y2, width, height);
     //ui->labelBilinear->clear();
     showImageM(bilinear, width, height, ui->labelBilinear);
     std::cout<<"Previous to delete\n";
     delete [] bilinear;
+}
+
+// Convolution of Perfilate & Gauss
+void MainWindow::on_horizontalSlider_sliderMoved(int position)
+{
+    //std::cout<<position<<"Pos"<<std::endl;
+    if(data != nullptr)
+        on_pushButton_2_clicked();
 }

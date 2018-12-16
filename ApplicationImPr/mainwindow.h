@@ -42,6 +42,8 @@ private slots:
 
     void on_pushButton_6_clicked();
 
+    void on_horizontalSlider_sliderMoved(int position);
+
 private:
     unsigned char * data = nullptr;
     int width, height;
